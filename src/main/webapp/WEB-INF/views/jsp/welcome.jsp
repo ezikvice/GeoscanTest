@@ -2,13 +2,12 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-<title>Spring MVC 4 + Ajax Hello World</title>
+<title>Test task for GeoScan</title>
 
 <c:url var="home" value="/" scope="request" />
 
-<spring:url value="/resources/core/css/hello.css" var="coreCss" />
 <spring:url value="/resources/core/css/bootstrap.min.css"
 	var="bootstrapCss" />
 <link href="${bootstrapCss}" rel="stylesheet" />
@@ -29,7 +28,7 @@
 <nav class="navbar navbar-inverse">
 	<div class="container">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#">Spring 4 MVC Ajax Hello World</a>
+			<a class="navbar-brand" href="#">Cubarium. Test task for GeoScan</a>
 		</div>
 	</div>
 </nav>
@@ -37,42 +36,33 @@
 <div class="container" style="min-height: 500px">
 
 	<div class="starter-template">
-		<h1>Search Form</h1>
-		<br>
-
-		<div id="feedback"></div>
 
 		<form class="form-horizontal" id="search-form">
 			<div class="form-group form-group-lg">
-				<label class="col-sm-2 control-label">Username</label>
+				<label class="col-sm-2 control-label">Walls Array</label>
 				<div class="col-sm-10">
 					<input type=text class="form-control" id="username">
-				</div>
-			</div>
-			<div class="form-group form-group-lg">
-				<label class="col-sm-2 control-label">Email</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="email">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
 					<button type="submit" id="bth-search"
-						class="btn btn-primary btn-lg">Search</button>
+						class="btn btn-primary btn-lg">GO!</button>
 				</div>
 			</div>
 		</form>
+		<div id="rndr"></div>
+		<div id="feedback"></div>
 
 	</div>
-	<div id="rndr"></div>
 
 </div>
 
 <div class="container">
 	<footer>
 		<p>
-			&copy; <a href="http://www.mkyong.com">Mkyong.com</a> 2015
+			&copy; <a href="http://www.mkyong.com">Mkyong.com</a> 2015, edited by Dimk 2017
 		</p>
 	</footer>
 </div>
@@ -81,58 +71,56 @@
 	jQuery(document).ready(function($) {
 
 
-	    ////// show "water pool" scene ///////
-        // TODO: replace this mock data by real ones
-        var brick_size = 8;
-        var bricks_array = [1, 0, 1, 2, 5, 3, 2, 8, 4, 6,
-            12, 4, 5, 5, 7, 3, 6, 2, 10, 3];
-        var water_array = [0, 0, 0, 0, 0, 5, 5, 0, 8, 8,
-            0, 10, 10, 10, 10, 10, 10, 10, 0, 0];
+
+        ////// show "water pool" scene ///////
+        function drawScene(bricks_array, water_array){
+
+            var brick_size = 8;
+
+            var bricks_count = bricks_array.length;
+            var brick_wall_length = bricks_count*brick_size;
 
 
-        var bricks_count = bricks_array.length;
-        var brick_wall_length = bricks_count*brick_size;
+            var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 800);
+            camera.position.set(-brick_wall_length/2, brick_wall_length/2, brick_wall_length);
 
-        var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 800);
-        camera.position.set(-brick_wall_length/2, brick_wall_length/2, brick_wall_length);
+            var scene = new THREE.Scene();
 
-        var scene = new THREE.Scene();
+//            var ambientLight = new THREE.AmbientLight(0x0c0c0c);
+//            scene.add(ambientLight);
 
-//    var ambientLight = new THREE.AmbientLight(0x0c0c0c);
-//    scene.add(ambientLight);
-
-//    var light = new THREE.PointLight();
-//    light.position.set(0, 200, 500);
-//    scene.add(light);
+            //// grid for a convenience
+            var plane = new THREE.GridHelper(brick_size*bricks_count, bricks_count);
+            scene.add(plane);
 
 
-        var renderer = renderer = new THREE.WebGLRenderer({ antialias: true });
+            var renderer = renderer = new THREE.WebGLRenderer({ antialias: true });
 //        renderer.setSize(window.innerWidth*3/4, window.innerHeight*3/4);
-        renderer.setSize(940, 940);
-        $("#rndr")[0].appendChild(renderer.domElement);
-//    renderer.setClearColor(0xF0F0FF, 1); // background color
+            renderer.setSize(940, 600);
+            $("#rndr").empty(); // deleting everything inside div
+            $("#rndr")[0].appendChild(renderer.domElement);
+		    renderer.setClearColor(0xF0F0FF, 1); // background color
 
 
-        var controls = new THREE.OrbitControls(camera, renderer.domElement);
+            var controls = new THREE.OrbitControls(camera, renderer.domElement);
 //    controls.minPolarAngle = Math.PI / 2; //uncomment for limiting angles
-        controls.maxPolarAngle = Math.PI / 2;
+            controls.maxPolarAngle = Math.PI / 2;
 
-// grid for a convenience
-        var plane = new THREE.GridHelper(brick_size*bricks_count, bricks_count);
-        scene.add(plane);
 
-        function animate() {
-            requestAnimationFrame(animate);
-            controls.update();
-            renderer.render(scene, camera);
-        }
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+            }
 
-        <spring:url value="/resources/core/img"
-                    var="img" />
-        var brick_texture = new THREE.TextureLoader().load( "${img}/plitka.jpg" );//load texture
-        var water_texture = new THREE.TextureLoader().load( '${img}/water2.jpg' );
 
-        function drawScene(bricks_array){
+
+            <spring:url value="/resources/core/img"
+            var="img" />
+            var brick_texture = new THREE.TextureLoader().load( "${img}/plitka.jpg" );//load texture
+            var water_texture = new THREE.TextureLoader().load( '${img}/water2.jpg' );
+
+
             for(var i = 0; i < bricks_count; i++){
                 if(bricks_array[i]>0) {
                     // bricks
@@ -157,24 +145,9 @@
                     }
                 }
             }
+
+            animate();
         }
-
-        function addWater(){
-            for(var i = 0; i < bricks_count; i++){
-                var water_material = new THREE.MeshBasicMaterial({map: water_texture});
-                water_material.opacity = 0.5;
-                water_material.transparent = true;
-                var water = new THREE.Mesh(cube_geometry, water_material);
-                water.position.y = brick_size;
-                water.position.x = i*brick_size-200;
-                scene.add(water);
-            }
-        }
-
-        drawScene(bricks_array);
-//    addWater();
-        animate();
-
         ////// <-- show "water pool" scene ///////
 
 
@@ -191,46 +164,57 @@
 
 		});
 
-	});
+		function searchViaAjax() {
 
-	function searchViaAjax() {
+//			var search = {}
+//			search["username"] = $("#username").val();
+//			search["email"] = $("#email").val();
 
-		var search = {}
-		search["username"] = $("#username").val();
-		search["email"] = $("#email").val();
+            // TODO: replace this mock data by real ones
+            var bricks_array = [1, 0, 1, 2, 5, 3, 2, 8, 4, 6,
+                12, 4, 5, 5, 7, 3, 6, 2, 10, 3];
+			var search = {};
+			search["data"] = bricks_array;
 
-		$.ajax({
-			type : "POST",
-			contentType : "application/json",
-			url : "${home}search/api/getSearchResult",
-			data : JSON.stringify(search),
-			dataType : 'json',
-			timeout : 100000,
-			success : function(data) {
-				console.log("SUCCESS: ", data);
-				display(data);
-			},
-			error : function(e) {
-				console.log("ERROR: ", e);
-				display(e);
-			},
-			done : function(e) {
-				console.log("DONE");
-				enableSearchButton(true);
-			}
-		});
+            $.ajax({
+				type : "POST",
+				contentType : "application/json",
+				url : "${home}search/api/getSearchResult",
+				data : JSON.stringify(search),
+				dataType : 'json',
+				timeout : 100000,
+				success : function(data) {
+					console.log("SUCCESS: ", data);
+					display(data);
 
-	}
+					var water_array = data.result;
+					drawScene(bricks_array, water_array);
+//					animate();
 
-	function enableSearchButton(flag) {
-		$("#btn-search").prop("disabled", flag);
-	}
+				},
+				error : function(e) {
+					console.log("ERROR: ", e);
+					display(e);
+				},
+				done : function(e) {
+					console.log("DONE");
+					enableSearchButton(true);
+				}
+			});
 
-	function display(data) {
-		var json = "<h4>Ajax Response</h4><pre>"
-				+ JSON.stringify(data, null, 4) + "</pre>";
-		$('#feedback').html(json);
-	}
+		}
+
+		function enableSearchButton(flag) {
+			$("#btn-search").prop("disabled", flag);
+		}
+
+		function display(data) {
+			var json = "<h4>Ajax Response</h4>"
+					+ JSON.stringify(data, null, 4);
+			$('#feedback').html(json);
+		}
+
+    });
 </script>
 
 </body>

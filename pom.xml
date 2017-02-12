@@ -8,6 +8,7 @@
 	<name>spring4 mvc maven ajax example</name>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
 		<spring.version>4.2.2.RELEASE</spring.version>
 		<jackson.version>2.6.3</jackson.version>

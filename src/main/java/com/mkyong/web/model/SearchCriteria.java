@@ -1,29 +1,23 @@
 package com.mkyong.web.model;
 
+import java.util.List;
+
 public class SearchCriteria {
 
-	String username;
-	String email;
+	List <Integer> data;
 
-	public String getUsername() {
-		return username;
+	public List <Integer> getData() {
+		return data;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setData(List <Integer> data) {
+		this.data = data;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
 
 	@Override
 	public String toString() {
-		return "SearchCriteria [username=" + username + ", email=" + email + "]";
+		return "SearchCriteria [data=" + data + "]";
 	}
 
 }
