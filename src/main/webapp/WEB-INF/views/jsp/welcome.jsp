@@ -1,4 +1,5 @@
-<%@page session="false"%>
+<%@page session="false" language="java" contentType="text/html; UTF-8"
+    pageEncoding="UTF-8" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
@@ -39,7 +40,7 @@
 
 		<form class="form-horizontal" id="search-form">
 			<div class="form-group form-group-lg">
-				<label class="col-sm-2 control-label">Walls Array</label>
+				<label class="col-sm-2 control-label">список высот</label>
 				<div class="col-sm-10">
 					<input type=text class="form-control" id="username">
 				</div>
@@ -48,7 +49,7 @@
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
 					<button type="submit" id="bth-search"
-						class="btn btn-primary btn-lg">GO!</button>
+						class="btn btn-primary btn-lg">Поехали!</button>
 				</div>
 			</div>
 		</form>
@@ -117,7 +118,7 @@
 
             <spring:url value="/resources/core/img"
             var="img" />
-            var brick_texture = new THREE.TextureLoader().load( "${img}/plitka.jpg" );//load texture
+            var brick_texture = new THREE.TextureLoader().load( "${img}/cats.png" );//load texture
             var water_texture = new THREE.TextureLoader().load( '${img}/water2.jpg' );
 
 
@@ -171,10 +172,14 @@
 //			search["email"] = $("#email").val();
 
             // TODO: replace this mock data by real ones
-            var bricks_array = [1, 0, 1, 2, 5, 3, 2, 8, 4, 6,
-                12, 4, 5, 5, 7, 3, 6, 2, 10, 3];
+//            var bricks_array = [1, 0, 1, 2, 5, 3, 2, 8, 4, 6,
+//                12, 4, 5, 5, 7, 3, 6, 2, 10, 3];
+//            var bricks_array = [0, 0, 1, 2, 3, 3, 2, 0, 4, 6,
+//                1, 0, 5, 5, 7, 6, 6, 2, 1, 0];
 			var search = {};
-			search["data"] = bricks_array;
+            var bricks_array = JSON.parse("[" + $("#username").val() + "]");
+            search["data"] = bricks_array;
+//			search["data"] = $("#username").val();
 
             $.ajax({
 				type : "POST",

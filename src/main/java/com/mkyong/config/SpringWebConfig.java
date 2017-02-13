@@ -28,7 +28,6 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		viewResolver.setContentType("text/html;charset=UTF-8");
 		viewResolver.setViewClass(JstlView.class);
 		viewResolver.setPrefix("/WEB-INF/views/jsp/");
 		viewResolver.setSuffix(".jsp");
@@ -41,9 +40,9 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 		return new WaterFillerImpl();
 	}
 
-	@Bean
-	public StringHttpMessageConverter stringHttpMessageConverter() {
-		return new StringHttpMessageConverter(Charset.forName("UTF-8"));
-	}
+//	@Bean
+//	public StringHttpMessageConverter stringHttpMessageConverter() {
+//		return new StringHttpMessageConverter(Charset.forName("UTF-8"));
+//	}
  
 }
