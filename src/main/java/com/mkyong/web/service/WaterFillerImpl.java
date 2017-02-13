@@ -115,6 +115,9 @@ public class WaterFillerImpl implements WaterFiller {
 
         while(currentLeft < end){
             while(curHeight>1){
+                if(currentLeft >= end){
+                    return end;
+                }
                 int cursor = currentLeft;
                 if(wall[currentLeft]>=curHeight){
                     cursor = findEmptyLeft(currentLeft, end);
