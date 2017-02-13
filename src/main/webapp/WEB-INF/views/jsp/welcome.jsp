@@ -63,7 +63,7 @@
 <div class="container">
 	<footer>
 		<p>
-			&copy; <a href="http://www.mkyong.com">Mkyong.com</a> 2015, edited by Dimk 2017
+			&copy; <a href="http://www.mkyong.com">Mkyong.com</a> 2015, edited by Dmitry 2017
 		</p>
 	</footer>
 </div>
@@ -167,19 +167,10 @@
 
 		function searchViaAjax() {
 
-//			var search = {}
-//			search["username"] = $("#username").val();
-//			search["email"] = $("#email").val();
-
-            // TODO: replace this mock data by real ones
-//            var bricks_array = [1, 0, 1, 2, 5, 3, 2, 8, 4, 6,
-//                12, 4, 5, 5, 7, 3, 6, 2, 10, 3];
-//            var bricks_array = [0, 0, 1, 2, 3, 3, 2, 0, 4, 6,
-//                1, 0, 5, 5, 7, 6, 6, 2, 1, 0];
 			var search = {};
+			// TODO: make a simple validation and error handling
             var bricks_array = JSON.parse("[" + $("#username").val() + "]");
             search["data"] = bricks_array;
-//			search["data"] = $("#username").val();
 
             $.ajax({
 				type : "POST",

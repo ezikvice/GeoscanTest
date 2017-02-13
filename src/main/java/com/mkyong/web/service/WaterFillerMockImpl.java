@@ -12,10 +12,15 @@ import java.util.List;
 @Service
 public class WaterFillerMockImpl implements WaterFiller {
 
+    /**
+     * this implementation do not really compute water level,
+     * it just put fake data in return
+     * @param bricksList
+     * @return
+     */
     @Override
     public List<Integer> Compute(List<Integer> bricksList) {
 
-        // TODO: real implementation!
         List<Integer> waterList = Arrays.asList(0, 0, 0, 0, 0, 5, 5, 0, 8, 8,
                 0, 10, 10, 10, 10, 10, 10, 10, 0, 0);
 

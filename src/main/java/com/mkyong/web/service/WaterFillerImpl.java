@@ -2,7 +2,6 @@ package com.mkyong.web.service;
 
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,9 +15,15 @@ public class WaterFillerImpl implements WaterFiller {
     // array of bricks heights
     private Integer[] wall;
 
+    // array of water heights
     private Integer[] waterArr;
 
 
+    /**
+     * computing water heights in the given wall
+     * @param bricksList
+     * @return list of water heights
+     */
     @Override
     public List<Integer> Compute(List<Integer> bricksList) {
 
@@ -31,15 +36,15 @@ public class WaterFillerImpl implements WaterFiller {
 
         //////// MAIN LOOP //////////
         while(curPos < wallEnd){
-            // ищем ближайший ноль справа
+            // looking for the nearest zero height to the right hand
             Integer nextZero = lookingNextZero(curPos);
             if (nextZero - curPos > 2) {
-                // есть остров, пытаемся заполнить водой
+                // if there is 3 or more squares, we can try to fill them with water
                 fillPart(curPos, nextZero);
                 curPos = nextZero;
 
-            }else{ // ставим нули, сдвигаем курсор и переходим на следующую итерацию цикла
-                coverWithWater(curPos, nextZero, 0);
+            }else{ // there is no water here. Filling with zeroes and go to the next loop
+                fillWithWater(curPos, nextZero, 0);
                 curPos = nextZero;
             }
 
@@ -129,7 +134,13 @@ public class WaterFillerImpl implements WaterFiller {
         return end;
     }
 
-    Integer findEmptyLeft(int start, int end){
+    /**
+     * finds empty position
+     * @param start
+     * @param end
+     * @return first left position from start that not in the wall
+     */
+    private Integer findEmptyLeft(int start, int end){
         for(int curPos = start+1; curPos < end; curPos++){
             if(wall[curPos] < wall[start]){
                 return curPos;
@@ -139,13 +150,13 @@ public class WaterFillerImpl implements WaterFiller {
     }
 
     /**
-     * filling the part of aquarium by water (from left to right limits)
+     * filling the part of aquarium by water (from leftPos to rightPos)
      *
-     * @param leftPos
-     * @param rightPos
+     * @param leftPos start
+     * @param rightPos end
      * @param height
      */
-    private void coverWithWater(Integer leftPos, Integer rightPos, Integer height) {
+    private void fillWithWater(Integer leftPos, Integer rightPos, Integer height) {
         for (int i = leftPos; i < rightPos; i++) {
             if (height > wall[i]) {
                 waterArr[i] = height;
@@ -155,41 +166,38 @@ public class WaterFillerImpl implements WaterFiller {
 
     /**
      * filling the area between places with zero height
+     * places with zero height must be found beforehand
      * @param start
      * @param end
      */
-    // заполняем область между нулями
     private void fillPart(Integer start, Integer end) {
 
-        // находим левую стенку
         Integer leftWall = lookingForLeftWall(start, end);
 
-        // заполняем нулями от старта до левой стенки
-        coverWithWater(start, leftWall, 0);
+        // squares before the left wall must be filled with zeroes
+        fillWithWater(start, leftWall, 0);
 
-        // если мы еще не в конце, то ищем правую стенку
         if (leftWall < end) {
 
             Integer rightWall = lookingForRightWall(leftWall, end);
 
-            // если правая стенка не в конце (а в конце нулевая высота),
-            // то заполняем водой от левой стенки до правой
+            // if the right wall is not in the end
+            // then filling with water
             if (rightWall < end) {
                 Integer height = Integer.min(wall[leftWall],wall[rightWall]);
-                coverWithWater(leftWall, rightWall, height);
+                fillWithWater(leftWall, rightWall, height);
 
-                // дальше правую стенку считаем началом
-                // и вызываем fillPart для части от нового начала до конца
+                // and then trying to fill the part from right wall till the end
                 fillPart(rightWall, end);
             }
-            // а если правая стенка в конце, то
             if (rightWall == end){
-                coverWithWater(leftWall, rightWall, 0);
+                fillWithWater(leftWall, rightWall, 0);
             }
-        } else // а если leftWall >= end..
+        } else // if leftWall >= end..
             {
-                // то левую стенку не нашли и заполняем оставшееся нулями
-                coverWithWater(start, end, 0);
+                // it means that we coudn`t find left wall till the end of wall
+                // so, filling the remaining part with zeroes
+                fillWithWater(start, end, 0);
                 return;
         }
 
