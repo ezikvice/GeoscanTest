@@ -89,11 +89,10 @@ public class WaterFillerImpl implements WaterFiller {
      */
     private Integer lookingForLeftWall(Integer start, Integer end) {
 
-        if(start+1>=end){
-            return end;
-        }
-
         for (int current = start; current < end; current++) {
+            if(current+1>=end){
+                return end;
+            }
             if (wall[current] > wall[current + 1]) {
                 return current;
             }
