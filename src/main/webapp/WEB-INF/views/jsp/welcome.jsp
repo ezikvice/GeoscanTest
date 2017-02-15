@@ -110,8 +110,17 @@
 			// SIMPLE
             var bricks_arr = $("#username").val().split(",");
 			var bricks_filtered = bricks_arr.filter(function(str){return str!==""}).map(Number);
+            for(var i = 0; i < bricks_filtered.length; ++i) {
+                if(bricks_filtered[i] < 0){
+                    bricks_filtered[i] = 0;
+				}
+                if(bricks_filtered[i] > 100){
+                    bricks_filtered[i] = 100;
+				}
+            }
 
-			var bricks_array = JSON.parse("[" + bricks_filtered + "]");
+
+            var bricks_array = JSON.parse("[" + bricks_filtered + "]");
 //            var bricks_array = JSON.parse("[" + $("#username").val() + "]");
             search["data"] = bricks_array;
 

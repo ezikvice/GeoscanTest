@@ -27,6 +27,16 @@ public class WaterFillerImpl implements WaterFiller {
     @Override
     public List<Integer> Compute(List<Integer> bricksList) {
 
+        // simple cutting of the bricksList`s height
+        for (int i = 0; i < bricksList.size(); i++) {
+            if (bricksList.get(i) < 0) {
+                bricksList.set(i, 0);
+            }
+            if (bricksList.get(i) > 100) {
+                bricksList.set(i, 100);
+            }
+        }
+
         wall = bricksList.toArray(new Integer[bricksList.size()]);
         waterArr = new Integer[wall.length];
 
