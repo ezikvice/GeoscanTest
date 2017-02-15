@@ -10,7 +10,7 @@ function drawScene(bricks_array, water_array){
     var brick_wall_length = bricks_count*brick_size;
 
 
-    var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 800);
+    var camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 1000);
     camera.position.set(-brick_wall_length/2, brick_wall_length/2, brick_wall_length);
 
     var scene = new THREE.Scene();
@@ -44,7 +44,6 @@ function drawScene(bricks_array, water_array){
 
 
     // loadTextures(brick_texture, water_texture);
-
     brick_texture = new THREE.TextureLoader().load( "/resources/core/img/cats.png" );//load texture
     water_texture = new THREE.TextureLoader().load( '/resources/core/img/water2.jpg' );
 

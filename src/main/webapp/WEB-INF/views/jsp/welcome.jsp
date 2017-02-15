@@ -107,21 +107,30 @@
 		function searchViaAjax() {
 
 			var search = {};
-			// SIMPLE
-            var bricks_arr = $("#username").val().split(",");
-			var bricks_filtered = bricks_arr.filter(function(str){return str!==""}).map(Number);
-            for(var i = 0; i < bricks_filtered.length; ++i) {
-                if(bricks_filtered[i] < 0){
-                    bricks_filtered[i] = 0;
-				}
-                if(bricks_filtered[i] > 100){
-                    bricks_filtered[i] = 100;
-				}
-            }
+            var bricks_array = new Array();
+
+			if($("#username").val().length>0) {
+                // SIMPLE
+                var bricks_arr = $("#username").val().split(",");
+                var bricks_filtered = bricks_arr.filter(function (str) {
+                    return str !== ""
+                }).map(Number);
+                for (var i = 0; i < bricks_filtered.length; ++i) {
+                    if (bricks_filtered[i] < 0) {
+                        bricks_filtered[i] = 0;
+                    }
+                    if (bricks_filtered[i] > 100) {
+                        bricks_filtered[i] = 100;
+                    }
+                }
+//            var brick_sliced = bricks_filtered.slice(0,100);
+                bricks_filtered.splice(100);
 
 
-            var bricks_array = JSON.parse("[" + bricks_filtered + "]");
-//            var bricks_array = JSON.parse("[" + $("#username").val() + "]");
+                bricks_array = JSON.parse("[" + bricks_filtered + "]");
+            }else{
+				randomize(bricks_array);
+			}
             search["data"] = bricks_array;
 
             $.ajax({
@@ -142,11 +151,11 @@
 				},
 				error : function(e) {
 					console.log("ERROR: ", e);
-//					displayErr(e);
-                    var err = '<div class="alert alert-danger">' +
-                        "<strong>Ой!</strong> Произошла какая-то ошибка. Возможно, вы заполнили неправильно список высот:" +
-                        '<pre>'+ e.responseJSON.msg +'</pre></div>';
-                    $('#feedback').html(err);
+					displayErr(e);
+//                    var err = '<div class="alert alert-danger">' +
+//                        "<strong>Ой!</strong> Произошла какая-то ошибка. Возможно, вы заполнили неправильно список высот:" +
+//                        '<pre>'+ e.responseJSON.msg +'</pre></div>';
+//                    $('#feedback').html(err);
 				},
 				done : function(e) {
 					console.log("DONE");
@@ -169,9 +178,17 @@
         function displayErr(e) {
             var err = '<div class="alert alert-danger">' +
 				"<strong>Ой!</strong> Произошла какая-то ошибка. Возможно, вы заполнили неправильно список высот" +
-            '</div>';
+                        '<pre>'+ e.responseJSON.msg +'</pre>' +
+				'</div>';
             $('#feedback').html(err);
         }
+
+        function randomize(bricks){
+		    var numOfBricks = Math.floor(Math.random() *101);
+		    for(var i = 0; i < numOfBricks; i++){
+		        bricks[i] = Math.floor(Math.random() *101);
+			}
+		}
 
     });
 </script>
